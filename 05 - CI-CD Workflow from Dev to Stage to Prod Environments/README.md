@@ -1,4 +1,4 @@
-# Day 23 – How Does an Application Move From Development to Production?
+# How Does an Application Move From Development to Production?
 
 ## 1. Introduction
 
