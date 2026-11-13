@@ -347,3 +347,24 @@ In this practical, I created and executed two Jenkins Shared Library projects.
 2. **Maven Build Shared Library:** Created a reusable Maven build function and used it to compile and package a Java application through Jenkins.
 
 I learned how Shared Libraries help us avoid code duplication, reuse pipeline functions and maintain Jenkins pipeline code centrally.
+
+# Programming Languages and Technologies Used
+
+### 1. Groovy
+Used for creating Jenkins Shared Libraries.
+
+- `helloWorld.groovy`
+- `mavenBuild.groovy`
+- `Jenkinsfile` (Jenkins Pipeline syntax is based on Groovy)
+
+### 2. Java
+Used for creating the Maven application.
+
+- `App.java`
+
+### Other Technologies
+
+- **XML:** Used for Maven project configuration in `pom.xml`.
+- **Bash/Shell:** Used for executing Linux and Maven commands.
+
+**Main Concept:** Jenkins Shared Libraries using Groovy, with a Java application built using Maven.
