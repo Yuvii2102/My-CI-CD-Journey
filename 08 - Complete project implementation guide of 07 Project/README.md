@@ -1231,6 +1231,14 @@ However, SQLite is not a suitable database design for a production application r
 
 For a real production application, I should use a proper database such as PostgreSQL or MySQL and configure suitable persistent storage and backups.
 
+### Source Repository
+
+I used the following repository as the source for this project:
+
+**Original Source:** [Python Jenkins Argo CD Kubernetes](https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero/tree/main/python-jenkins-argocd-k8s)
+
+The repository contains the Django application, Dockerfile, Jenkinsfile and Kubernetes deployment files.
+
 ---
 
 **Final Note:** These points will help me understand the important configurations and avoid common problems when setting up this project again on a fresh EC2 instance.
