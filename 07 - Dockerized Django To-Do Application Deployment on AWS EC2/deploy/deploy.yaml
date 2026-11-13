@@ -1,21 +1,22 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-app
+  name: django-todo
   labels:
-    app: nginx
+    app: django-todo
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: nginx
+      app: django-todo
   template:
     metadata:
       labels:
-        app: nginx
+        app: django-todo
     spec:
       containers:
-      - name: todo
-        image: abhishekf5/todo-app:v1
-        ports:
-        - containerPort: 8000
+        - name: django-todo
+          image: yuvi2102/django-todo:latest
+          ports:
+            - containerPort: 8000
