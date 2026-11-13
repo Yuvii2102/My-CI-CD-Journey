@@ -1,4 +1,4 @@
-# Dockerized Django To-Do Application Deployment on AWS EC2
+# Part 2 : Dockerized Django To-Do Application Deployment on AWS EC2
 
 ## 1. Project Overview
 
