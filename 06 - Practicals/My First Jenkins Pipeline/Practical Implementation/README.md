@@ -1,4 +1,4 @@
-# Project 1: My First Jenkins Pipeline Using Docker
+# Project 1: My First Jenkins Pipeline Using Docker ( Practicals )
 
 ## 1. Project Overview
 
