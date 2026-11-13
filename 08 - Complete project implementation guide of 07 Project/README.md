@@ -1,4 +1,4 @@
-# End-to-End CI/CD Pipeline for a Dockerized Django To-Do Application Using Jenkins, Docker Hub, GitHub, Argo CD and Kubernetes on AWS EC2
+# End-to-End CI/CD Pipeline for a Dockerized Django To-Do Application Using Python, Jenkins, Docker Hub, GitHub, Argo CD and Kubernetes on AWS EC2
 
 ## Complete End-to-End CI/CD Project: From Scratch to Deployment
 
