@@ -1,4 +1,4 @@
-# Project 1: My First Jenkins Pipeline
+# Project 1: My First Jenkins Pipeline ( Theory )
 
 ## 1. Introduction
 
