@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: django-todo
-          image: yuvi2102/django-todo:latest
+          image: yuvi2102/django-todo:2
           ports:
             - containerPort: 8000
