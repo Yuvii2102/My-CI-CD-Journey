@@ -1,190 +1,38 @@
-# Jenkins Shared Libraries ( Practicals )
+Jenkins Shared Libraries ( Practicals )
 
-## 1. Introduction
+## Project 1 – HelloWorld Shared Library
 
-A Jenkins Shared Library allows us to write reusable pipeline code and share it across multiple Jenkins pipelines.
+### Objective
 
-Instead of writing the same pipeline steps repeatedly, we can create reusable Groovy functions in a GitHub repository and call them whenever required.
+Create a reusable Groovy function, execute it through Jenkins, modify the function and verify that Jenkins uses the updated code.
 
-### Why do we use Shared Libraries?
+### Step 1: Create the Initial Shared Library File
 
-- Avoid repeating pipeline code.
-- Reuse functions across multiple Jenkins jobs.
-- Maintain pipeline code in one central location.
-- Update shared code without changing every Jenkinsfile.
+Navigate to the GitHub repository:
 
-### How Shared Libraries Work
-
-1. We create Groovy files inside a GitHub repository.
-2. We configure that repository in Jenkins as a Global Trusted Pipeline Library.
-3. Jenkins downloads the library when a pipeline runs.
-4. The Jenkinsfile imports the library using `@Library`.
-5. The pipeline calls the required shared function.
-
----
-
-## 2. Prerequisites
-
-Before starting the practical, we need:
-
-- AWS EC2 instance running Ubuntu.
-- Jenkins installed and running.
-- GitHub repository to store Shared Library files.
-- Java 21 JDK.
-- Maven.
-
-### Step 1: Update Ubuntu
-
-```bash
-sudo apt update
-sudo apt upgrade -y
-```
-
-### Step 2: Install Java 21 JDK
-
-Install the complete JDK because it includes both Java and the Java compiler.
-
-```bash
-sudo apt install openjdk-21-jdk -y
-```
-
-Verify Java:
-
-```bash
-java -version
-```
-
-Verify the Java compiler:
-
-```bash
-javac -version
-```
-
-Both should show Java 21.
-
-### Step 3: Install Maven
-
-```bash
-sudo apt install maven -y
-```
-
-Verify Maven:
-
-```bash
-mvn -version
-```
-
-Check that Maven is using Java 21.
-
-### Step 4: Verify Tools for the Jenkins User
-
-Jenkins executes pipeline commands using its own Linux user.
-
-Run:
-
-```bash
-sudo -H -u jenkins bash -c 'cd /var/lib/jenkins && java -version && javac -version && mvn -version'
-```
-
-Verify that Java 21, javac 21 and Maven are available.
-
----
-
-## 3. GitHub Repository Structure
-
-Our GitHub repository:
-
-**Repository:** My-CI-CD-Journey
-
-https://github.com/Yuvii2102/My-CI-CD-Journey
-
-The Shared Library files are stored in this folder:
-
-`09 - Practicals of Shared Libraries`
-
-Our folder structure:
-
-```text
-My-CI-CD-Journey/
-│
-└── 09 - Practicals of Shared Libraries/
-    │
-    └── vars/
-        │
-        ├── helloWorld.groovy
-        │
-        └── mavenBuild.groovy
-```
-
-### Understanding the vars Folder
-
-The `vars` folder contains reusable Groovy functions.
-
-Each Groovy file inside this folder can be called as a pipeline step using its filename.
-
-For example:
-
-- `helloWorld.groovy` → `helloWorld()`
-- `mavenBuild.groovy` → `mavenBuild()`
-
----
-
-# PROJECT 1 – HelloWorld Shared Library
-
-## 4. Objective
-
-Create a reusable Groovy function that prints messages in the Jenkins console.
-
-We will store the function in GitHub and call it from a Jenkins pipeline.
-
-### Step 1: Create helloWorld.groovy
-
-Navigate to:
-
-`09 - Practicals of Shared Libraries/vars/`
+`My-CI-CD-Journey/09 - Practicals of Shared Libraries/vars/`
 
 Create a file named:
 
 `helloWorld.groovy`
 
-Add the following code:
+**Initial code – Version 1**
 
 ```groovy
 def call() {
-    echo 'Welcome to my Jenkins Shared Library!'
-    echo 'This code is reused across multiple pipelines.'
+    echo 'Hello from DevOps Team'
 }
 ```
 
-### Understanding the Code
+Commit and push this file to the `main` branch.
 
-- `def` defines a function in Groovy.
-- `call()` allows us to execute the function directly by using its library name.
-- `echo` prints a message in the Jenkins console.
-
-Because the file is named `helloWorld.groovy`, we can call it using:
-
-```groovy
-helloWorld()
-```
-
-### Step 2: Push the File to GitHub
-
-Commit and push the file to the `main` branch.
-
-Make sure the file is available at:
-
-`09 - Practicals of Shared Libraries/vars/helloWorld.groovy`
-
-### Step 3: Configure Global Trusted Pipeline Library
-
-Open Jenkins.
+### Step 2: Configure the Shared Library in Jenkins
 
 Navigate to:
 
 **Manage Jenkins → System → Global Trusted Pipeline Libraries**
 
-Add a new library with these settings:
+Configure the following settings:
 
 | Setting | Value |
 |---|---|
@@ -192,25 +40,23 @@ Add a new library with these settings:
 | Default version | `main` |
 | Retrieval method | Modern SCM |
 | Source Code Management | Git |
-| Project Repository | `https://github.com/Yuvii2102/My-CI-CD-Journey.git` |
+| Repository URL | `https://github.com/Yuvii2102/My-CI-CD-Journey.git` |
 | Credentials | None (public repository) |
 | Library Path | `09 - Practicals of Shared Libraries` |
 
 Save the configuration.
 
-**Important:** Configure this library only once. We will reuse the same configuration for Project 2.
-
-### Step 4: Create a Jenkins Pipeline Job
+### Step 3: Create a Jenkins Pipeline Job
 
 1. Open the Jenkins dashboard.
 2. Click **New Item**.
-3. Enter the job name: `shared-library-demo`.
+3. Enter the name `shared-library-demo`.
 4. Select **Pipeline**.
 5. Click **OK**.
-6. Scroll to the Pipeline section.
+6. Scroll down to the Pipeline section.
 7. Select **Pipeline script**.
 
-Add this Jenkinsfile:
+Add the following Jenkinsfile:
 
 ```groovy
 @Library('my-shared-library') _
@@ -228,22 +74,56 @@ pipeline {
 }
 ```
 
-### Understanding the Jenkinsfile
-
-- `@Library('my-shared-library') _` imports our configured Shared Library.
-- `pipeline` defines the Jenkins pipeline.
-- `agent any` allows Jenkins to execute the pipeline on an available agent.
-- `stage` defines a stage in the pipeline.
-- `helloWorld()` calls the function from `helloWorld.groovy`.
-
-### Step 5: Execute the Pipeline
+### Step 4: Execute the First Build
 
 1. Click **Save**.
 2. Click **Build Now**.
 3. Open the latest build.
 4. Click **Console Output**.
 
-Expected output:
+**Expected output:**
+
+```text
+Hello from DevOps Team
+```
+
+The build should finish with:
+
+```text
+Finished: SUCCESS
+```
+
+At this point, we have successfully executed our first Shared Library function.
+
+### Step 5: Modify the Shared Library Code
+
+Now go back to GitHub and open:
+
+`09 - Practicals of Shared Libraries/vars/helloWorld.groovy`
+
+Initially, our function printed only one message. Now we will modify it to print two messages.
+
+**Updated code – Version 2**
+
+```groovy
+def call() {
+    echo 'Welcome to my Jenkins Shared Library!'
+    echo 'This code is reused across multiple pipelines.'
+}
+```
+
+Commit and push the updated code to the `main` branch.
+
+### Step 6: Execute the Pipeline Again
+
+We do not need to modify our Jenkinsfile.
+
+1. Open the `shared-library-demo` job.
+2. Click **Build Now**.
+3. Open the latest build.
+4. Click **Console Output**.
+
+**Expected output:**
 
 ```text
 Welcome to my Jenkins Shared Library!
@@ -256,36 +136,33 @@ The build should finish with:
 Finished: SUCCESS
 ```
 
-### Step 6: Test Code Reusability
+### Step 7: Understand What Happened
 
-Now change the message inside `helloWorld.groovy` in GitHub.
+In this practical, we executed the same Jenkins pipeline twice.
 
-For example:
+| First Build | Second Build |
+|---|---|
+| Used the original code | Used the updated code |
+| Printed `Hello from DevOps Team` | Printed two updated messages |
+| Jenkinsfile called `helloWorld()` | Jenkinsfile still called `helloWorld()` |
 
-```groovy
-def call() {
-    echo 'Hello from DevOps Team!'
-    echo 'Updated from the Jenkins Shared Library.'
-}
-```
+**Important learning:**
 
-Commit and push the changes.
+We changed the code inside the Shared Library without changing the Jenkinsfile.
 
-Run the Jenkins pipeline again.
+Jenkins fetched the updated Shared Library code from GitHub during the next build and executed it.
 
-Jenkins will retrieve the updated library code and execute the new messages without changing the Jenkinsfile.
+This demonstrates the main advantage of Shared Libraries: we can maintain reusable code centrally and use it across multiple Jenkins pipelines.
 
 **Project 1 completed!**
 
 ---
 
-# PROJECT 2 – Maven Build Using Shared Library
+## Project 2 – Maven Build Using Shared Library
 
-## 5. Objective
+### Objective
 
-Create a reusable Maven build function inside our Jenkins Shared Library.
-
-We will create a simple Java application, generate its Maven configuration and build it using the shared function.
+Create another reusable Groovy function that executes a Maven build command and use it to build a Java application through Jenkins.
 
 ### Step 1: Create mavenBuild.groovy
 
@@ -305,27 +182,9 @@ def call() {
 }
 ```
 
-### Understanding the Code
+Commit and push the file to GitHub.
 
-- `def call()` defines the reusable function.
-- `sh` executes a shell command on the Jenkins agent.
-- `mvn clean install` performs the Maven build.
-
-The command has two main parts:
-
-**clean**
-
-Removes the previous build output, usually stored in the `target` directory.
-
-**install**
-
-Builds the project, runs configured tests and installs the generated artifact into the local Maven repository if the build succeeds.
-
-### Step 2: Push the File to GitHub
-
-Commit and push `mavenBuild.groovy` to the `main` branch.
-
-Confirm that both files are present:
+Our `vars` folder should now contain:
 
 ```text
 vars/
@@ -334,32 +193,33 @@ vars/
 └── mavenBuild.groovy
 ```
 
-We do not need to create another Shared Library configuration. We will reuse `my-shared-library`.
+### Step 2: Verify Java and Maven
 
-### Step 3: Prepare the Maven Project
+Install Java 21 JDK and Maven on Ubuntu if they are not already installed.
 
-Our Jenkins pipeline will create a simple Java project.
-
-The project structure will be:
-
-```text
-shared-library-demo/
-│
-├── pom.xml
-│
-└── src/
-    └── main/
-        └── java/
-            └── com/
-                └── example/
-                    └── App.java
+```bash
+sudo apt update
+sudo apt install openjdk-21-jdk -y
+sudo apt install maven -y
 ```
 
-### Step 4: Update the Jenkins Pipeline Script
+Verify the installations:
 
-Open the existing Jenkins job:
+```bash
+java -version
+javac -version
+mvn -version
+```
 
-`shared-library-demo`
+Verify that the Jenkins user can access all three tools:
+
+```bash
+sudo -H -u jenkins bash -c 'cd /var/lib/jenkins && java -version && javac -version && mvn -version'
+```
+
+### Step 3: Update the Jenkins Pipeline
+
+Open the existing `shared-library-demo` job.
 
 Navigate to:
 
@@ -429,59 +289,29 @@ public class App {
 }
 ```
 
-### Step 5: Understand the Jenkinsfile
+### Step 4: Understand the Pipeline
 
 **Stage 1 – Create Maven Project**
 
-```groovy
-sh 'mkdir -p src/main/java/com/example'
-```
-
-Creates the required Java source directory.
-
-```groovy
-writeFile file: 'pom.xml', text: '''...'''
-```
-
-Creates the Maven configuration file.
-
-The `pom.xml` contains:
-
-- Group ID
-- Artifact ID
-- Version
-- Java compiler release
-- Maven compiler plugin
-
-```groovy
-writeFile file: 'src/main/java/com/example/App.java', text: '''...'''
-```
-
-Creates our Java application.
-
-The application prints:
-
-```text
-Hello from Maven Shared Library!
-```
+- Creates the Java source directory.
+- Creates `pom.xml` with Maven project configuration.
+- Creates `App.java` containing our Java application.
 
 **Stage 2 – Maven Build**
+
+Calls:
 
 ```groovy
 mavenBuild()
 ```
 
-Calls the reusable function from:
+This executes the function stored in `mavenBuild.groovy`:
 
-`09 - Practicals of Shared Libraries/vars/mavenBuild.groovy`
-
-That function executes:
-
-```bash
-mvn clean install
+```groovy
+sh 'mvn clean install'
 ```
 
-### Step 6: Execute the Pipeline
+### Step 5: Execute the Pipeline
 
 1. Save the Jenkinsfile.
 2. Open the `shared-library-demo` job.
@@ -489,23 +319,12 @@ mvn clean install
 4. Open the latest build.
 5. Click **Console Output**.
 
-### Expected Build Process
+Maven will clean previous build files, compile the Java application, run configured tests, package the application and install the generated artifact into its local repository.
 
-Maven performs the following operations:
-
-1. Reads the `pom.xml` file.
-2. Downloads the required Maven plugins and dependencies.
-3. Cleans previous build output.
-4. Compiles the Java source file.
-5. Runs configured tests.
-6. Packages the application into a JAR file.
-7. Installs the artifact into the local Maven repository.
-
-### Expected Output
+**Expected output:**
 
 ```text
 BUILD SUCCESS
-
 Finished: SUCCESS
 ```
 
@@ -519,54 +338,12 @@ The generated JAR file will be available at:
 
 ---
 
-# 6. Final Project Comparison
+## Final Outcome
 
-| Feature | Project 1 | Project 2 |
-|---|---|---|
-| Shared Library file | `helloWorld.groovy` | `mavenBuild.groovy` |
-| Function | `helloWorld()` | `mavenBuild()` |
-| Main purpose | Print messages | Build Java application |
-| Jenkins operation | `echo` | `sh` |
-| Tool used | Jenkins Pipeline | Maven and Java |
-| Result | Console messages | Generated JAR file |
+In this practical, I created and executed two Jenkins Shared Library projects.
 
-# 7. Important Concepts to Remember
+1. **HelloWorld Shared Library:** Created a reusable Groovy function, executed its original version, modified the code in GitHub and verified the updated output without changing the Jenkinsfile.
 
-**What is a Jenkins Shared Library?**
+2. **Maven Build Shared Library:** Created a reusable Maven build function and used it to compile and package a Java application through Jenkins.
 
-A collection of reusable Groovy code that can be shared across Jenkins pipelines.
-
-**Why do we use the vars folder?**
-
-It stores reusable pipeline functions that can be called directly from a Jenkinsfile.
-
-**What is call() in a Shared Library?**
-
-It defines the function that Jenkins executes when we call the library file by its name.
-
-**What is @Library?**
-
-It imports a configured Shared Library into our Jenkins pipeline.
-
-**What is a Global Trusted Pipeline Library?**
-
-It is a Jenkins configuration that makes a shared library available to pipeline jobs.
-
-**What is Maven?**
-
-Maven is a build automation tool used to compile Java code, manage dependencies, run tests and package applications.
-
-**What is pom.xml?**
-
-It is the Project Object Model file that contains Maven project configuration and dependencies.
-
-# 8. Final Outcome
-
-In this practical, I created two Jenkins Shared Library projects.
-
-1. Created a reusable HelloWorld function and executed it through a Jenkins pipeline.
-2. Created a reusable Maven build function and used it to build a Java application.
-
-I also learned how to configure a Global Trusted Pipeline Library, import it using `@Library` and execute reusable functions from Jenkinsfiles.
-
-**Key takeaway:** Shared Libraries help us write cleaner, reusable and maintainable Jenkins pipelines.
+I learned how Shared Libraries help us avoid code duplication, reuse pipeline functions and maintain Jenkins pipeline code centrally.
