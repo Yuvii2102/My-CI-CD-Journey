@@ -1148,3 +1148,90 @@ Kubernetes: 2/2 REPLICAS RUNNING
 ```
 
 This project gave me practical experience with Docker, Jenkins, Kubernetes, GitOps and automated application deployment on AWS EC2.
+
+
+## Important Notes for Reproducing the Project
+
+Before repeating this project on a new EC2 instance, remember these important points.
+
+### 1. Source Repository
+
+I first used the original repository provided by my teacher to get the Django application.
+
+After that, I copied the application files into my own GitHub repository, `My-CI-CD-Journey`.
+
+For future setups, I can directly clone my own repository:
+
+```bash
+git clone https://github.com/Yuvii2102/My-CI-CD-Journey.git
+```
+
+### 2. Application Folder
+
+The application folder name contains spaces. So, always use quotation marks when navigating into it.
+
+```bash
+cd "My-CI-CD-Journey/07 - Dockerized Django To-Do Application Deployment on AWS EC2"
+```
+
+This helps the terminal understand the complete folder name correctly.
+
+### 3. Dockerfile Configuration
+
+The original Dockerfile used `python:3` as its base image.
+
+I changed it to `python:3.10` because the application uses Django 3.2 and needed a compatible Python version.
+
+```dockerfile
+FROM python:3.10
+```
+
+Keep the other working Dockerfile settings unchanged unless there is a specific reason to modify them.
+
+### 4. Jenkins Pipeline Trigger
+
+In this project, I started the Jenkins pipeline manually by clicking **Build Now**.
+
+Jenkins did not automatically start when I pushed new code to GitHub because I did not configure a GitHub webhook.
+
+A webhook can be added later to trigger Jenkins automatically after a code push.
+
+### 5. After Restarting EC2
+
+Whenever I stop and start the EC2 instance, I need to check whether the required services are running.
+
+- Jenkins
+- Minikube
+- Argo CD
+- `socat` forwarding process
+
+The EC2 public IP address may change after restarting the instance.
+
+If it changes, I need to use the new IP in my Jenkins and Argo CD access URLs and update any related Security Group rules if required.
+
+### 6. GitHub Token Security
+
+In my tested Jenkinsfile, I used a GitHub token in the HTTPS URL to push the updated Kubernetes manifest.
+
+This worked successfully for the project.
+
+However, putting a token directly in a Git URL can expose it through command details or Git configuration.
+
+For a production setup, I should use a safer Git authentication method that uses Jenkins credentials without exposing the token in the URL or process arguments.
+
+Never share GitHub tokens or passwords publicly.
+
+### 7. Kubernetes and Database Storage
+
+The Django application uses SQLite as its database.
+
+In this project, I configured two application replicas to demonstrate how Kubernetes manages application pods.
+
+However, SQLite is not a suitable database design for a production application running multiple replicas that need to share the same data.
+
+For a real production application, I should use a proper database such as PostgreSQL or MySQL and configure suitable persistent storage and backups.
+
+---
+
+**Final Note:** These points will help me understand the important configurations and avoid common problems when setting up this project again on a fresh EC2 instance.
+
