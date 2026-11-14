@@ -50,4 +50,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: yuvii2102/my-python-app:latest
+          tags: yuvi2102/my-python-app:latest
