@@ -1,4 +1,4 @@
-# Practical : Setting Up GitHub Actions Self-Hosted Runner on AWS EC2
+# Practical : Setting Up GitHub Actions Self-Hosted Runner on AWS EC2 .
 
 ## 1. Goal of the Practical
 
